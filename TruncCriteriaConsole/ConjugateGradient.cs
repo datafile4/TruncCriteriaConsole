@@ -8,13 +8,11 @@ using TruncCriteriaConsole;
 
 namespace TruncCriteriaConsole
 {
-   
     
+
     class ConjugateGradient
     {
-      
-
-        public static void gradient(double[] X, ref double[] res, int N)
+        public static void gradient(double[] X, ref double[] res, int N,FunctionDelegate f)
         {
             double h = 0.001;
             double result;
@@ -23,9 +21,9 @@ namespace TruncCriteriaConsole
             for (int i = 0; i < N; i++)
             {
                 X[i] = X[i] + h;
-                f1 = Function.f(X);
+                f1 = f(X);
                 X[i] = X[i] - 2 * h;
-                f2 = Function.f(X);
+                f2 = f(X);
                 result = 0.5 * (f1 - f2) / h;
                 res[i] = result;
                 X[i] = X[i] + h;
@@ -57,7 +55,7 @@ namespace TruncCriteriaConsole
                 dirNew[i] = -gradNow[i] + bk * dirPrev[i];
         }
 
-       public  static void ConjugateGradientMethod(double[] X0, ref double[] res, double th, double tau, int N, double eps)
+       public  static void ConjugateGradientMethod(double[] X0, ref double[] res, double th, double tau, int N, double eps, FunctionDelegate f)
         {
             Function.N = N;
             double[] gradFNow = new double[N];
@@ -76,7 +74,7 @@ namespace TruncCriteriaConsole
 
             do
             {
-                gradient(xNow, ref gradFNow, N);
+                gradient(xNow, ref gradFNow, N, f);
                 //******************************
                 if (k == N || k == 0)
                 {
@@ -90,7 +88,7 @@ namespace TruncCriteriaConsole
                 {
                     for (int i = 0; i < N; i++)
                         grDirectionPrev[i] = grDirection[i];
-                    gradient(xPrev, ref gradFPrev, N);
+                    gradient(xPrev, ref gradFPrev, N, f);
                     grBk = fletcher(gradFNow, gradFPrev,N);
                     direction(gradFNow, grDirectionPrev, grBk, ref grDirection, N);
                 }
@@ -109,7 +107,7 @@ namespace TruncCriteriaConsole
                     Console.Write("xNow {0} ", xNow[i]);
                 }
                 Console.WriteLine();
-                Console.WriteLine("F = {0} ", Math.Round(Function.f(xNow), 6, MidpointRounding.AwayFromZero));
+                Console.WriteLine("F = {0} ", Math.Round(f(xNow), 6, MidpointRounding.AwayFromZero));
                 k++;
                 count++;
 
@@ -118,7 +116,7 @@ namespace TruncCriteriaConsole
 					Console.WriteLine("Функция возрастает");
 					break;
 				}*/
-            } while (Math.Abs(Function.f(xNow) - Function.f(xPrev)) / Function.f(xNow) > eps);
+            } while (Math.Abs(f(xNow) - f(xPrev)) / f(xNow) > eps);
             Console.WriteLine(count);
             for (int i = 0; i < N; i++)
                 res[i] = xNow[i];

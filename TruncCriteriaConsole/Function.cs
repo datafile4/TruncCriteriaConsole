@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace TruncCriteriaConsole
 {
+    public delegate double FunctionDelegate(double[] X);
+
     class Function
     {
         public static int N { get; set; }
@@ -14,13 +16,35 @@ namespace TruncCriteriaConsole
             return x * x;
         }
 
-       public  static double f(double[] X)
+        //criteries
+        List<FunctionDelegate> criteriaList = new List<FunctionDelegate> { f1,f2};
+       
+       public  static double f1(double[] X)
         {
-            double result = 100 * Sqr(Sqr(X[0]) - X[1]) + Sqr(1 - X[0]);
+            double result = Sqr(X[0]) + Sqr(X[1]);
             return result;
         }
 
-        public static double f(double[] Xk, double[] dk, double t)
+        public static double f2(double[] X)
+        {
+            double result = Sqr(X[0] - 1) + Sqr(X[1])+X[1];
+            return result;
+        }
+
+        //restrictions 
+        List<FunctionDelegate> restrictionList = new List<FunctionDelegate> {g1,g2};
+
+        public static double g1(double[] X)
+        {
+            return Math.Abs(X[0]);
+        }
+
+        public static double g2(double[] X)
+        {
+            return Math.Abs(X[1]);
+        }
+
+        public static double fOne(double[] Xk, double[] dk, double t,FunctionDelegate f)
         {
             double[] X = new double[N];
             for (int i = 0; i < N; i++)
@@ -30,5 +54,7 @@ namespace TruncCriteriaConsole
             double result = f(X);
             return result;
         }
+
+
     }
 }

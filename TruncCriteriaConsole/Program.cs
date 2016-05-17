@@ -9,14 +9,22 @@ namespace TruncCriteriaConsole
 {
     class Program
     {
-        const double eps = 0.0001;
+        
         static void Main(string[] args)
         {
-            
-            Console.Write("Enter N: ");
-            int N = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter eps for gradient method: ");
+            double eps = double.Parse(Console.ReadLine());
+            int N = 2;
             double[] X0 = new double[N];
             double[] result = new double[N];
+            //double[] values = new double[N];
+            //for(int i = 0; i <N; i++)
+            //{
+            //    Console.Write("Enter the desired value function {0} :",i );
+            //    values[i] = double.Parse(Console.ReadLine());
+            //}
+
             for (int i = 0; i < N; i++)
             {
                 Console.Write("Enter X{0} ", i);
@@ -28,17 +36,9 @@ namespace TruncCriteriaConsole
             double tau = double.Parse(Console.ReadLine());
 
 
-            ConjugateGradient.ConjugateGradientMethod(X0, ref result, t, tau, N, eps);
-            for(int i = 0; i<N; i++)
-            {
-                Console.Write("{0} ",result[i]);
-            }
             Console.ReadKey();
         }
 
-        public static double Sqr(double x)
-        {
-            return x * x;
-        }
+       
     }
 }
